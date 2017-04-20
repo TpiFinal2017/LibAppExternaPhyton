@@ -48,7 +48,7 @@ public class TipoPaso implements Serializable {
     private String paso;
     @Basic(optional = false)
     @Column(name = "activo")
-    private String activo;
+    private boolean activo;
     @Column(name = "observacion")
     private String observacion;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idTipoPaso", fetch = FetchType.EAGER)
@@ -61,7 +61,7 @@ public class TipoPaso implements Serializable {
         this.idTipoPaso = idTipoPaso;
     }
 
-    public TipoPaso(Integer idTipoPaso, String paso, String activo) {
+    public TipoPaso(Integer idTipoPaso, String paso, boolean activo) {
         this.idTipoPaso = idTipoPaso;
         this.paso = paso;
         this.activo = activo;
@@ -83,11 +83,11 @@ public class TipoPaso implements Serializable {
         this.paso = paso;
     }
 
-    public String getActivo() {
+     public boolean isActivo() {
         return activo;
     }
 
-    public void setActivo(String activo) {
+    public void setActivo(boolean activo) {
         this.activo = activo;
     }
 

@@ -32,7 +32,8 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "Requisito", catalog = "CasosAcad_db", schema = "")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Requisito.findAll", query = "SELECT r FROM Requisito r")
+    @NamedQuery(name = "Requisito.findByTipo", query = "SELECT r.idRequisito, t.nombre, r.requisito, r.descripcion, r.textoPublico, r.obligatorio, r.activo  FROM Requisito r JOIN r.idTipoRequisito t")
+    , @NamedQuery(name = "Requisito.findAll", query = "SELECT r FROM Requisito r")
     , @NamedQuery(name = "Requisito.findByIdRequisito", query = "SELECT r FROM Requisito r WHERE r.idRequisito = :idRequisito")
     , @NamedQuery(name = "Requisito.findByRequisito", query = "SELECT r FROM Requisito r WHERE r.requisito = :requisito")
     , @NamedQuery(name = "Requisito.findByDescripcion", query = "SELECT r FROM Requisito r WHERE r.descripcion = :descripcion")
