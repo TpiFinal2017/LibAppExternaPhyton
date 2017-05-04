@@ -21,6 +21,8 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -29,11 +31,10 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author manuel
  */
 @Entity
-@Table(name = "Requisito", catalog = "CasosAcad_db", schema = "")
+@Table(name = "requisito", catalog = "CasosAcad_db", schema = "")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Requisito.findByTipo", query = "SELECT r.idRequisito, t.nombre, r.requisito, r.descripcion, r.textoPublico, r.obligatorio, r.activo  FROM Requisito r JOIN r.idTipoRequisito t")
-    , @NamedQuery(name = "Requisito.findAll", query = "SELECT r FROM Requisito r")
+    @NamedQuery(name = "Requisito.findAll", query = "SELECT r FROM Requisito r")
     , @NamedQuery(name = "Requisito.findByIdRequisito", query = "SELECT r FROM Requisito r WHERE r.idRequisito = :idRequisito")
     , @NamedQuery(name = "Requisito.findByRequisito", query = "SELECT r FROM Requisito r WHERE r.requisito = :requisito")
     , @NamedQuery(name = "Requisito.findByDescripcion", query = "SELECT r FROM Requisito r WHERE r.descripcion = :descripcion")
@@ -49,25 +50,33 @@ public class Requisito implements Serializable {
     @Column(name = "idRequisito")
     private Integer idRequisito;
     @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 45)
     @Column(name = "requisito")
     private String requisito;
     @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 45)
     @Column(name = "descripcion")
     private String descripcion;
     @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 100)
     @Column(name = "textoPublico")
     private String textoPublico;
     @Basic(optional = false)
+    @NotNull
     @Column(name = "obligatorio")
     private boolean obligatorio;
     @Basic(optional = false)
+    @NotNull
     @Column(name = "activo")
     private boolean activo;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idRequisito", fetch = FetchType.EAGER)
-    private List<PasoRequisito> pasoRequisitoList;
     @JoinColumn(name = "idTipo_Requisito", referencedColumnName = "idTipo_Requisito")
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private TipoRequisito idTipoRequisito;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idRequisito", fetch = FetchType.EAGER)
+    private List<PasoRequisito> pasoRequisitoList;
 
     public Requisito() {
     }
@@ -133,6 +142,14 @@ public class Requisito implements Serializable {
         this.activo = activo;
     }
 
+    public TipoRequisito getIdTipoRequisito() {
+        return idTipoRequisito;
+    }
+
+    public void setIdTipoRequisito(TipoRequisito idTipoRequisito) {
+        this.idTipoRequisito = idTipoRequisito;
+    }
+
     @XmlTransient
     public List<PasoRequisito> getPasoRequisitoList() {
         return pasoRequisitoList;
@@ -140,14 +157,6 @@ public class Requisito implements Serializable {
 
     public void setPasoRequisitoList(List<PasoRequisito> pasoRequisitoList) {
         this.pasoRequisitoList = pasoRequisitoList;
-    }
-
-    public TipoRequisito getIdTipoRequisito() {
-        return idTipoRequisito;
-    }
-
-    public void setIdTipoRequisito(TipoRequisito idTipoRequisito) {
-        this.idTipoRequisito = idTipoRequisito;
     }
 
     @Override

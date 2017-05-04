@@ -19,6 +19,8 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -27,13 +29,14 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author manuel
  */
 @Entity
-@Table(name = "Proceso", catalog = "CasosAcad_db", schema = "")
+@Table(name = "proceso", catalog = "CasosAcad_db", schema = "")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Proceso.findAll", query = "SELECT p FROM Proceso p")
     , @NamedQuery(name = "Proceso.findByIdProceso", query = "SELECT p FROM Proceso p WHERE p.idProceso = :idProceso")
     , @NamedQuery(name = "Proceso.findByNombre", query = "SELECT p FROM Proceso p WHERE p.nombre = :nombre")
-    , @NamedQuery(name = "Proceso.findByResponsable", query = "SELECT p FROM Proceso p WHERE p.responsable = :responsable")})
+    , @NamedQuery(name = "Proceso.findByActivo", query = "SELECT p FROM Proceso p WHERE p.activo = :activo")
+    , @NamedQuery(name = "Proceso.findByDescripcion", query = "SELECT p FROM Proceso p WHERE p.descripcion = :descripcion")})
 public class Proceso implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -43,11 +46,19 @@ public class Proceso implements Serializable {
     @Column(name = "idProceso")
     private Integer idProceso;
     @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 45)
     @Column(name = "nombre")
     private String nombre;
     @Basic(optional = false)
-    @Column(name = "responsable")
-    private String responsable;
+    @NotNull
+    @Column(name = "activo")
+    private boolean activo;
+    @Size(max = 75)
+    @Column(name = "descripcion")
+    private String descripcion;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idProceso", fetch = FetchType.EAGER)
+    private List<ProcesoDetalle> procesoDetalleList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idProceso", fetch = FetchType.EAGER)
     private List<Caso> casoList;
 
@@ -58,10 +69,10 @@ public class Proceso implements Serializable {
         this.idProceso = idProceso;
     }
 
-    public Proceso(Integer idProceso, String nombre, String responsable) {
+    public Proceso(Integer idProceso, String nombre, boolean activo) {
         this.idProceso = idProceso;
         this.nombre = nombre;
-        this.responsable = responsable;
+        this.activo = activo;
     }
 
     public Integer getIdProceso() {
@@ -80,12 +91,29 @@ public class Proceso implements Serializable {
         this.nombre = nombre;
     }
 
-    public String getResponsable() {
-        return responsable;
+    public boolean getActivo() {
+        return activo;
     }
 
-    public void setResponsable(String responsable) {
-        this.responsable = responsable;
+    public void setActivo(boolean activo) {
+        this.activo = activo;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    @XmlTransient
+    public List<ProcesoDetalle> getProcesoDetalleList() {
+        return procesoDetalleList;
+    }
+
+    public void setProcesoDetalleList(List<ProcesoDetalle> procesoDetalleList) {
+        this.procesoDetalleList = procesoDetalleList;
     }
 
     @XmlTransient

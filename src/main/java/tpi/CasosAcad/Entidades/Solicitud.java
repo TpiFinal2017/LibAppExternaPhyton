@@ -19,6 +19,8 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -27,7 +29,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author manuel
  */
 @Entity
-@Table(name = "Solicitud", catalog = "CasosAcad_db", schema = "")
+@Table(name = "solicitud", catalog = "CasosAcad_db", schema = "")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Solicitud.findAll", query = "SELECT s FROM Solicitud s")
@@ -43,9 +45,13 @@ public class Solicitud implements Serializable {
     @Column(name = "idSolicitud")
     private Integer idSolicitud;
     @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 45)
     @Column(name = "fecha")
     private String fecha;
     @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 45)
     @Column(name = "Solicitante")
     private String solicitante;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idSolicitud", fetch = FetchType.EAGER)

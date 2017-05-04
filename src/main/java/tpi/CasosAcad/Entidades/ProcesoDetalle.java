@@ -7,14 +7,21 @@ package tpi.CasosAcad.Entidades;
 
 import java.io.Serializable;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -22,16 +29,12 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author manuel
  */
 @Entity
-@Table(name = "Proceso_Detalle", catalog = "CasosAcad_db", schema = "")
+@Table(name = "proceso_detalle", catalog = "CasosAcad_db", schema = "")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "ProcesoDetalle.findAll", query = "SELECT p FROM ProcesoDetalle p")
     , @NamedQuery(name = "ProcesoDetalle.findByIdProcesoDetalle", query = "SELECT p FROM ProcesoDetalle p WHERE p.idProcesoDetalle = :idProcesoDetalle")
-    , @NamedQuery(name = "ProcesoDetalle.findByIdProceso", query = "SELECT p FROM ProcesoDetalle p WHERE p.idProceso = :idProceso")
-    , @NamedQuery(name = "ProcesoDetalle.findByIdPaso", query = "SELECT p FROM ProcesoDetalle p WHERE p.idPaso = :idPaso")
-    , @NamedQuery(name = "ProcesoDetalle.findByFecha", query = "SELECT p FROM ProcesoDetalle p WHERE p.fecha = :fecha")
-    , @NamedQuery(name = "ProcesoDetalle.findByResponsable", query = "SELECT p FROM ProcesoDetalle p WHERE p.responsable = :responsable")
-    , @NamedQuery(name = "ProcesoDetalle.findBySolicitante", query = "SELECT p FROM ProcesoDetalle p WHERE p.solicitante = :solicitante")})
+    , @NamedQuery(name = "ProcesoDetalle.findByResponsable", query = "SELECT p FROM ProcesoDetalle p WHERE p.responsable = :responsable")})
 public class ProcesoDetalle implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -41,20 +44,21 @@ public class ProcesoDetalle implements Serializable {
     @Column(name = "idProceso_Detalle")
     private Integer idProcesoDetalle;
     @Basic(optional = false)
-    @Column(name = "idProceso")
-    private int idProceso;
-    @Basic(optional = false)
-    @Column(name = "idPaso")
-    private int idPaso;
-    @Basic(optional = false)
-    @Column(name = "fecha")
-    private String fecha;
-    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 45)
     @Column(name = "responsable")
     private String responsable;
-    @Basic(optional = false)
-    @Column(name = "solicitante")
-    private String solicitante;
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "procesoDetalle1", fetch = FetchType.EAGER)
+    private ProcesoDetalle procesoDetalle;
+    @JoinColumn(name = "idProceso_Detalle", referencedColumnName = "idProceso_Detalle", insertable = false, updatable = false)
+    @OneToOne(optional = false, fetch = FetchType.EAGER)
+    private ProcesoDetalle procesoDetalle1;
+    @JoinColumn(name = "idPaso", referencedColumnName = "idPaso")
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    private Paso idPaso;
+    @JoinColumn(name = "idProceso", referencedColumnName = "idProceso")
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    private Proceso idProceso;
 
     public ProcesoDetalle() {
     }
@@ -63,13 +67,9 @@ public class ProcesoDetalle implements Serializable {
         this.idProcesoDetalle = idProcesoDetalle;
     }
 
-    public ProcesoDetalle(Integer idProcesoDetalle, int idProceso, int idPaso, String fecha, String responsable, String solicitante) {
+    public ProcesoDetalle(Integer idProcesoDetalle, String responsable) {
         this.idProcesoDetalle = idProcesoDetalle;
-        this.idProceso = idProceso;
-        this.idPaso = idPaso;
-        this.fecha = fecha;
         this.responsable = responsable;
-        this.solicitante = solicitante;
     }
 
     public Integer getIdProcesoDetalle() {
@@ -80,30 +80,6 @@ public class ProcesoDetalle implements Serializable {
         this.idProcesoDetalle = idProcesoDetalle;
     }
 
-    public int getIdProceso() {
-        return idProceso;
-    }
-
-    public void setIdProceso(int idProceso) {
-        this.idProceso = idProceso;
-    }
-
-    public int getIdPaso() {
-        return idPaso;
-    }
-
-    public void setIdPaso(int idPaso) {
-        this.idPaso = idPaso;
-    }
-
-    public String getFecha() {
-        return fecha;
-    }
-
-    public void setFecha(String fecha) {
-        this.fecha = fecha;
-    }
-
     public String getResponsable() {
         return responsable;
     }
@@ -112,12 +88,36 @@ public class ProcesoDetalle implements Serializable {
         this.responsable = responsable;
     }
 
-    public String getSolicitante() {
-        return solicitante;
+    public ProcesoDetalle getProcesoDetalle() {
+        return procesoDetalle;
     }
 
-    public void setSolicitante(String solicitante) {
-        this.solicitante = solicitante;
+    public void setProcesoDetalle(ProcesoDetalle procesoDetalle) {
+        this.procesoDetalle = procesoDetalle;
+    }
+
+    public ProcesoDetalle getProcesoDetalle1() {
+        return procesoDetalle1;
+    }
+
+    public void setProcesoDetalle1(ProcesoDetalle procesoDetalle1) {
+        this.procesoDetalle1 = procesoDetalle1;
+    }
+
+    public Paso getIdPaso() {
+        return idPaso;
+    }
+
+    public void setIdPaso(Paso idPaso) {
+        this.idPaso = idPaso;
+    }
+
+    public Proceso getIdProceso() {
+        return idProceso;
+    }
+
+    public void setIdProceso(Proceso idProceso) {
+        this.idProceso = idProceso;
     }
 
     @Override

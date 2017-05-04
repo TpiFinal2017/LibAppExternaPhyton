@@ -18,6 +18,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -25,7 +27,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author manuel
  */
 @Entity
-@Table(name = "Caso_Detalle_Requisito_Atestado", catalog = "CasosAcad_db", schema = "")
+@Table(name = "caso_detalle_requisito_atestado", catalog = "CasosAcad_db", schema = "")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "CasoDetalleRequisitoAtestado.findAll", query = "SELECT c FROM CasoDetalleRequisitoAtestado c")
@@ -40,6 +42,8 @@ public class CasoDetalleRequisitoAtestado implements Serializable {
     @Column(name = "idCaso_Detalle_Requisito_Atestado")
     private Integer idCasoDetalleRequisitoAtestado;
     @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 45)
     @Column(name = "documento")
     private String documento;
     @JoinColumn(name = "idCaso_Detalle_Requisito", referencedColumnName = "idCaso_Detalle_Requisito")

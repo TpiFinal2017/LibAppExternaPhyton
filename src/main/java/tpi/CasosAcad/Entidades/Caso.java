@@ -21,6 +21,8 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -29,7 +31,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author manuel
  */
 @Entity
-@Table(name = "Caso", catalog = "CasosAcad_db", schema = "")
+@Table(name = "caso", catalog = "CasosAcad_db", schema = "")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Caso.findAll", query = "SELECT c FROM Caso c")
@@ -38,8 +40,6 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Caso.findByEncargado", query = "SELECT c FROM Caso c WHERE c.encargado = :encargado")})
 public class Caso implements Serializable {
 
-    //prueba
-    
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,19 +47,23 @@ public class Caso implements Serializable {
     @Column(name = "idCaso")
     private Integer idCaso;
     @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 45)
     @Column(name = "nombre")
     private String nombre;
     @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 45)
     @Column(name = "encargado")
     private String encargado;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idCaso", fetch = FetchType.EAGER)
-    private List<CasoDetalle> casoDetalleList;
     @JoinColumn(name = "idProceso", referencedColumnName = "idProceso")
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Proceso idProceso;
     @JoinColumn(name = "idSolicitud", referencedColumnName = "idSolicitud")
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Solicitud idSolicitud;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idCaso", fetch = FetchType.EAGER)
+    private List<CasoDetalle> casoDetalleList;
 
     public Caso() {
     }
@@ -98,15 +102,6 @@ public class Caso implements Serializable {
         this.encargado = encargado;
     }
 
-    @XmlTransient
-    public List<CasoDetalle> getCasoDetalleList() {
-        return casoDetalleList;
-    }
-
-    public void setCasoDetalleList(List<CasoDetalle> casoDetalleList) {
-        this.casoDetalleList = casoDetalleList;
-    }
-
     public Proceso getIdProceso() {
         return idProceso;
     }
@@ -121,6 +116,15 @@ public class Caso implements Serializable {
 
     public void setIdSolicitud(Solicitud idSolicitud) {
         this.idSolicitud = idSolicitud;
+    }
+
+    @XmlTransient
+    public List<CasoDetalle> getCasoDetalleList() {
+        return casoDetalleList;
+    }
+
+    public void setCasoDetalleList(List<CasoDetalle> casoDetalleList) {
+        this.casoDetalleList = casoDetalleList;
     }
 
     @Override

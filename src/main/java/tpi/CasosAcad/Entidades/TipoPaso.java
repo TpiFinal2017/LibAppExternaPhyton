@@ -19,6 +19,8 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -27,7 +29,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author manuel
  */
 @Entity
-@Table(name = "Tipo_Paso", catalog = "CasosAcad_db", schema = "")
+@Table(name = "tipo_paso", catalog = "CasosAcad_db", schema = "")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "TipoPaso.findAll", query = "SELECT t FROM TipoPaso t")
@@ -44,11 +46,15 @@ public class TipoPaso implements Serializable {
     @Column(name = "idTipo_Paso")
     private Integer idTipoPaso;
     @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 45)
     @Column(name = "paso")
     private String paso;
     @Basic(optional = false)
+    @NotNull
     @Column(name = "activo")
     private boolean activo;
+    @Size(max = 45)
     @Column(name = "observacion")
     private String observacion;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idTipoPaso", fetch = FetchType.EAGER)
@@ -83,7 +89,7 @@ public class TipoPaso implements Serializable {
         this.paso = paso;
     }
 
-     public boolean isActivo() {
+    public boolean getActivo() {
         return activo;
     }
 

@@ -21,6 +21,8 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -29,7 +31,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author manuel
  */
 @Entity
-@Table(name = "Paso", catalog = "CasosAcad_db", schema = "")
+@Table(name = "paso", catalog = "CasosAcad_db", schema = "")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Paso.findAll", query = "SELECT p FROM Paso p")
@@ -44,13 +46,17 @@ public class Paso implements Serializable {
     @Column(name = "idPaso")
     private Integer idPaso;
     @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 45)
     @Column(name = "paso")
     private String paso;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idPaso", fetch = FetchType.EAGER)
-    private List<PasoRequisito> pasoRequisitoList;
+    private List<ProcesoDetalle> procesoDetalleList;
     @JoinColumn(name = "idTipo_Paso", referencedColumnName = "idTipo_Paso")
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private TipoPaso idTipoPaso;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idPaso", fetch = FetchType.EAGER)
+    private List<PasoRequisito> pasoRequisitoList;
 
     public Paso() {
     }
@@ -81,12 +87,12 @@ public class Paso implements Serializable {
     }
 
     @XmlTransient
-    public List<PasoRequisito> getPasoRequisitoList() {
-        return pasoRequisitoList;
+    public List<ProcesoDetalle> getProcesoDetalleList() {
+        return procesoDetalleList;
     }
 
-    public void setPasoRequisitoList(List<PasoRequisito> pasoRequisitoList) {
-        this.pasoRequisitoList = pasoRequisitoList;
+    public void setProcesoDetalleList(List<ProcesoDetalle> procesoDetalleList) {
+        this.procesoDetalleList = procesoDetalleList;
     }
 
     public TipoPaso getIdTipoPaso() {
@@ -95,6 +101,15 @@ public class Paso implements Serializable {
 
     public void setIdTipoPaso(TipoPaso idTipoPaso) {
         this.idTipoPaso = idTipoPaso;
+    }
+
+    @XmlTransient
+    public List<PasoRequisito> getPasoRequisitoList() {
+        return pasoRequisitoList;
+    }
+
+    public void setPasoRequisitoList(List<PasoRequisito> pasoRequisitoList) {
+        this.pasoRequisitoList = pasoRequisitoList;
     }
 
     @Override

@@ -21,6 +21,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -29,7 +30,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author manuel
  */
 @Entity
-@Table(name = "Caso_Detalle_Requisito", catalog = "CasosAcad_db", schema = "")
+@Table(name = "caso_detalle_requisito", catalog = "CasosAcad_db", schema = "")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "CasoDetalleRequisito.findAll", query = "SELECT c FROM CasoDetalleRequisito c")
@@ -44,13 +45,14 @@ public class CasoDetalleRequisito implements Serializable {
     @Column(name = "idCaso_Detalle_Requisito")
     private Integer idCasoDetalleRequisito;
     @Basic(optional = false)
+    @NotNull
     @Column(name = "idPaso_Requisito")
     private int idPasoRequisito;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idCasoDetalleRequisito", fetch = FetchType.EAGER)
+    private List<CasoDetalleRequisitoAtestado> casoDetalleRequisitoAtestadoList;
     @JoinColumn(name = "idCaso_Detalle", referencedColumnName = "idCaso_Detalle")
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private CasoDetalle idCasoDetalle;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idCasoDetalleRequisito", fetch = FetchType.EAGER)
-    private List<CasoDetalleRequisitoAtestado> casoDetalleRequisitoAtestadoList;
 
     public CasoDetalleRequisito() {
     }
@@ -80,14 +82,6 @@ public class CasoDetalleRequisito implements Serializable {
         this.idPasoRequisito = idPasoRequisito;
     }
 
-    public CasoDetalle getIdCasoDetalle() {
-        return idCasoDetalle;
-    }
-
-    public void setIdCasoDetalle(CasoDetalle idCasoDetalle) {
-        this.idCasoDetalle = idCasoDetalle;
-    }
-
     @XmlTransient
     public List<CasoDetalleRequisitoAtestado> getCasoDetalleRequisitoAtestadoList() {
         return casoDetalleRequisitoAtestadoList;
@@ -95,6 +89,14 @@ public class CasoDetalleRequisito implements Serializable {
 
     public void setCasoDetalleRequisitoAtestadoList(List<CasoDetalleRequisitoAtestado> casoDetalleRequisitoAtestadoList) {
         this.casoDetalleRequisitoAtestadoList = casoDetalleRequisitoAtestadoList;
+    }
+
+    public CasoDetalle getIdCasoDetalle() {
+        return idCasoDetalle;
+    }
+
+    public void setIdCasoDetalle(CasoDetalle idCasoDetalle) {
+        this.idCasoDetalle = idCasoDetalle;
     }
 
     @Override

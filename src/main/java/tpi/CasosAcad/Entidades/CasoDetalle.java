@@ -21,6 +21,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -29,7 +30,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author manuel
  */
 @Entity
-@Table(name = "Caso_Detalle", catalog = "CasosAcad_db", schema = "")
+@Table(name = "caso_detalle", catalog = "CasosAcad_db", schema = "")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "CasoDetalle.findAll", query = "SELECT c FROM CasoDetalle c")
@@ -44,6 +45,7 @@ public class CasoDetalle implements Serializable {
     @Column(name = "idCaso_Detalle")
     private Integer idCasoDetalle;
     @Basic(optional = false)
+    @NotNull
     @Column(name = "idProceso_Detalle")
     private int idProcesoDetalle;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idCasoDetalle", fetch = FetchType.EAGER)
