@@ -29,7 +29,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "PasoRequisito.findAll", query = "SELECT p FROM PasoRequisito p")
-    , @NamedQuery(name = "PasoRequisito.findByIdPasoRequisito", query = "SELECT p FROM PasoRequisito p WHERE p.idPasoRequisito = :idPasoRequisito")})
+    , @NamedQuery(name = "PasoRequisito.findByIdPasoRequisito", query = "SELECT p FROM PasoRequisito p WHERE p.idPasoRequisito = :idPasoRequisito")
+    , @NamedQuery(name = "PasoRequisito.findByIdPaso", query = "SELECT p FROM PasoRequisito p WHERE p.idPaso = :idPaso")})
 public class PasoRequisito implements Serializable {
 
     private static final long serialVersionUID = 1L;
